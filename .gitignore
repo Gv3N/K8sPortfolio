@@ -1,0 +1,29 @@
+# Node.js (Frontend)
+frontend/node_modules/
+frontend/build/
+frontend/npm-debug.log
+frontend/yarn-error.log
+
+# Python (Backend)
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.env  # If you have an environment file for Flask
+
+# Docker
+docker-compose.yml
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Miscellaneous
+*.DS_Store
