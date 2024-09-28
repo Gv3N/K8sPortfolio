@@ -1,2 +1,8 @@
 Flask==2.0.3
 Werkzeug==2.0.3
+psycopg2-binary==2.9.3
+Flask-Cors==3.0.10  # To handle CORS for React frontend
+Flask-SQLAlchemy==2.5.1 # simplifies database interactions and provides an Object-Relational Mapping (ORM) layer.
+SQLAlchemy==1.4.27  # Explicitly specify a compatible version
+python-dotenv==0.19.0 # Helps to read Flask Env variables
+flask-bcrypt==0.7.1 # Hashing and verifying passwords securely
