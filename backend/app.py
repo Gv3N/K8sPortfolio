@@ -37,11 +37,14 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
-# Items    
-class Item(db.Model):
-    __tablename__ = 'items'
-    id = db.Column(db.Integer, primary_key=True)
+# Curated Projects    
+class CuratedProjects(db.Model):
+    __tablename__ = 'curated_projects'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)  # Adjust length as needed
+    repo_url = db.Column(db.String(255), nullable=True)  # Adjust length as needed
+    external_url = db.Column(db.String(255), nullable=True)  # Adjust length as neede
     
      
 # Function to check if a table exists
@@ -54,15 +57,24 @@ def table_exists(table_name):
 @app.before_first_request
 def create_tables():
     
+    #if table_exists('items'):
+        #try:
+            #db.session.execute('DROP TABLE items;')
+            #db.session.commit()
+            #print("Table 'items' dropped successfully.")
+        #except Exception as e:
+            #db.session.rollback()
+            #print(f"Error dropping table: {e}")
+    
     # Check if the table exists and truncate it if it does
-    if table_exists('items'):
-        try:
-            db.session.execute('TRUNCATE TABLE items RESTART IDENTITY CASCADE;')
-            db.session.commit()
-            print("Table 'items' truncated successfully.")
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error truncating table: {e}")
+    #if table_exists('curated_projects'):
+        #try:
+            #db.session.execute('TRUNCATE TABLE curated_projects RESTART IDENTITY CASCADE;')
+            #db.session.commit()
+            #print("Table 'curated_projects' truncated successfully.")
+        #except Exception as e:
+            #db.session.rollback()
+            #print(f"Error truncating table: {e}")
     
     # Create the tables only if it doesn't exist
     db.create_all()
@@ -105,40 +117,65 @@ def forgot_password():
         return jsonify({"message": "Password updated successfully!"}), 200
     return jsonify({"message": "User not found!"}), 404
 
-#Items CRUD Route
-@app.route('/items', methods=['GET'])
-def get_items():
-    items = Item.query.all()
-    return jsonify([[item.id, item.name] for item in items])
-    
-@app.route('/items', methods=['POST'])
-def create_item():
-    new_item = request.json['name']
-    item = Item(name=new_item)
-    db.session.add(item)
-    db.session.commit()
-    return jsonify({"message": "Item created"}), 201
+# Curated Projects CRUD Route
+@app.route('/curated_projects', methods=['GET'])
+def get_curated_projects():
+    curated_projects = CuratedProjects.query.order_by(CuratedProjects.id).all()
+    return jsonify([
+        {
+            "id": project.id,
+            "name": project.name,
+            "description": project.description,
+            "repo_url": project.repo_url,
+            "external_url": project.external_url
+        } for project in curated_projects
+    ]), 200
 
-@app.route('/items/<int:item_id>', methods=['PUT'])
-def update_item(item_id):
-    item = Item.query.get(item_id)
-    if not item:
-        return jsonify({"message": "Item not found"}), 404
-    else:
-        updated_item = request.json['name']
-        item.name = updated_item
-        db.session.commit()
-        return jsonify({"message": "Item updated"})
-    
-@app.route('/items/<int:item_id>', methods=['DELETE'])
-def delete_item(item_id):
-    item = Item.query.get(item_id)
-    if not item:
-        return jsonify({"message": "Item not found"}), 404
-    else:
-        db.session.delete(item)
-        db.session.commit()
-        return jsonify({"message": "Item deleted"})
+@app.route('/curated_projects', methods=['POST'])
+def create_curated_project():
+    data = request.json
+    name = data.get('name')
+    description = data.get('description', "")
+    repo_url = data.get('repo_url', "")
+    external_url = data.get('external_url', "")
+
+    new_project = CuratedProjects(
+        name=name,
+        description=description,
+        repo_url=repo_url,
+        external_url=external_url
+    )
+
+    db.session.add(new_project)
+    db.session.commit()
+
+    return jsonify({"message": "Curated project created"}), 201
+
+@app.route('/curated_projects/<int:project_id>', methods=['PUT'])
+def update_curated_project(project_id):
+    project = CuratedProjects.query.get(project_id)
+    if not project:
+        return jsonify({"message": "Curated project not found"}), 404
+
+    data = request.json
+    project.name = data.get('name', project.name)
+    project.description = data.get('description', project.description)
+    project.repo_url = data.get('repo_url', project.repo_url)
+    project.external_url = data.get('external_url', project.external_url)
+    db.session.commit()
+
+    return jsonify({"message": "Curated project updated"}), 200
+
+@app.route('/curated_projects/<int:project_id>', methods=['DELETE'])
+def delete_curated_project(project_id):
+    project = CuratedProjects.query.get(project_id)
+    if not project:
+        return jsonify({"message": "Curated project not found"}), 404
+
+    db.session.delete(project)
+    db.session.commit()
+
+    return jsonify({"message": "Curated project deleted"}), 200
 
 
 if __name__ == '__main__':

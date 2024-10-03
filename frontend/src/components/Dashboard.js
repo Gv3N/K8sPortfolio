@@ -1,12 +1,16 @@
 // src/components/Dashboard.js
-
 import React, { useState, useEffect } from 'react';
 import { fetchItems, createItem, updateItem, deleteItem } from '../apiService';
 import EditModal from './EditModal';
 
 const Dashboard = () => {
     const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState("");
+    const [newItem, setNewItem] = useState({
+        name: '',
+        description: '',
+        repo_url: '',
+        external_url: ''
+    });
     const [editingItem, setEditingItem] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,13 +25,27 @@ const Dashboard = () => {
 
     // Handle creating a new item
     const handleCreateItem = async () => {
-        if (newItem) {
+        if (newItem.name) {
             await createItem(newItem);
-            setNewItem("");
+            setNewItem({
+                name: '',
+                description: '',
+                repo_url: '',
+                external_url: ''
+            });
             // Refresh items
             const updatedItems = await fetchItems();
             setItems(updatedItems);
         }
+    };
+
+    // Handle input changes for the new item form
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     // Handle opening modal
@@ -37,8 +55,8 @@ const Dashboard = () => {
     };
 
     // Handle saving edited item
-    const handleSaveEdit = async (id, name) => {
-        await updateItem(id, name);
+    const handleSaveEdit = async (id, updatedItem) => {
+        await updateItem(id, updatedItem); // Pass the full updated item
         const updatedItems = await fetchItems();
         setItems(updatedItems);
     };
@@ -60,11 +78,33 @@ const Dashboard = () => {
             <div>
                 <input
                     type="text"
-                    value={newItem}
-                    onChange={(e) => setNewItem(e.target.value)}
-                    placeholder="Enter item name"
+                    name="name"
+                    value={newItem.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter project name"
                 />
-                <button onClick={handleCreateItem}>Add Item</button>
+                <input
+                    type="text"
+                    name="description"
+                    value={newItem.description}
+                    onChange={handleInputChange}
+                    placeholder="Enter description"
+                />
+                <input
+                    type="text"
+                    name="repo_url"
+                    value={newItem.repo_url}
+                    onChange={handleInputChange}
+                    placeholder="Enter repository URL"
+                />
+                <input
+                    type="text"
+                    name="external_url"
+                    value={newItem.external_url}
+                    onChange={handleInputChange}
+                    placeholder="Enter external URL"
+                />
+                <button onClick={handleCreateItem}>Add Project</button>
             </div>
 
             {/* Items table */}
@@ -73,17 +113,23 @@ const Dashboard = () => {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Description</th>
+                        <th>Repo URL</th>
+                        <th>External URL</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {items.map(item => (
-                        <tr key={item[0]}>
-                            <td>{item[0]}</td>
-                            <td>{item[1]}</td>
+                        <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.name}</td>
+                            <td>{item.description}</td>
+                            <td>{item.repo_url}</td>
+                            <td>{item.external_url}</td>
                             <td>
                                 <button onClick={() => handleEditItem(item)}>Edit</button>
-                                <button onClick={() => handleDeleteItem(item[0])}>Delete</button>
+                                <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

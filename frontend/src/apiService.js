@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/items";
+const API_URL = "http://localhost:5000/curated_projects"; // Updated to reflect the correct endpoint
 
 // Fetch all items
 export const fetchItems = async () => {
@@ -7,21 +7,21 @@ export const fetchItems = async () => {
 };
 
 // Create a new item
-export const createItem = async (name) => {
+export const createItem = async (itemDetails) => { // Updated to take the full item object
     const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
+        body: JSON.stringify(itemDetails) // Send the entire itemDetails object
     });
     return response.json();
 };
 
 // Update an item
-export const updateItem = async (id, name) => {
+export const updateItem = async (id, itemDetails) => { // Updated to take the full item object
     const response = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
+        body: JSON.stringify(itemDetails) // Send the entire itemDetails object
     });
     return response.json();
 };

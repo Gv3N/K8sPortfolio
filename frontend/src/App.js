@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Dashboard from './components/Dashboard';
+import PortfolioPage from './components/PortfolioPage';
 import './App.css'; // Create a CSS file for styling
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   return (
     <Router>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<PortfolioPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
