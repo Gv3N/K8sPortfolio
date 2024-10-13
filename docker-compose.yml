@@ -1,0 +1,63 @@
+version: '3'
+services:
+  frontend:
+    # Notes: Build image locally for any changes to be done to the image else use pre-build image from docker hub
+    build:
+      context: ./frontend
+    image: k8sportfolio_frontend_react_image  # Custom image name
+    # image: baktajivan/k8sportfolio:frontend  # Pre build image
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+    image: k8sportfolio_backend_flask_image  # Custom image name
+    # image: baktajivan/k8sportfolio:backend  # Pre build image
+    ports:
+      - "5000:5000"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=k8sportfolio
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+    image: k8sportfolio_server_nginx_image  # Custom image name
+    # image: baktajivan/k8sportfolio:nginx  # Pre build image
+    ports:
+      - "8080:80" ## Avoid conflict with XAMPP Apache on port 80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+  
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: k8sportfolio
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      #- ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

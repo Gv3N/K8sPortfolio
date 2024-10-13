@@ -12,7 +12,7 @@ backend/*.pyd
 backend/.env  # If you have an environment file for Flask
 
 # Docker
-docker-compose.yml
+#docker-compose.yml
 
 # IDEs and editors
 .vscode/
