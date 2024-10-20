@@ -130,9 +130,3 @@ const PortfolioPage = () => {
 };
 
 export default PortfolioPage;
-
-// index has been merged, and done
-//working on portfolio page db get all item loop
-//then rename this into portfolio
-//clean up files and do final push
-//do readme file
