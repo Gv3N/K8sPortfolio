@@ -119,11 +119,10 @@ The architecture of the K8sPortfolio application is designed to separate concern
 - **Architecture Diagram**:
 
 ```mermaid 
-graph TD; 
-A[React App] --> B[NGINX]; 
-B --> C[Flask API]; 
-C --> D[PostgreSQL DB]; 
-
+graph TD;
+A[React App] --> B[NGINX];
+B --> C[Flask API];
+C --> D[PostgreSQL DB];
 style A fill:#f9f,stroke:#000,stroke-width:2px,color:#000;
 style B fill:#ff9,stroke:#000,stroke-width:2px,color:#000; 
 style C fill:#9f9,stroke:#000,stroke-width:2px,color:#000; 
