@@ -227,7 +227,7 @@ kubectl rollout restart deployment <deployment-name> -n k8sportfolio-namespace
 Replace `<full pod name>`, `<pod name>`, or `<deployment-name>` with the actual names relevant to your application.
 
 > **Note**: If the issue persists, refer to the [Kubernetes official documentation](https://kubernetes.io/docs/home/) for additional
-> troubleshooting guidance and resources. You can also customize the deployment.yml files to better suit your specific 
+> troubleshooting guidance and resources. You can also customize the deployment.yml file to better suit your specific 
 environment and machine setup.
 
 ## Usage
