@@ -183,12 +183,16 @@ The application is configured for deployment in a Kubernetes cluster. The necess
 ### Deploying the Application
 
 To deploy the application to your Kubernetes cluster, follow these steps:
+1.  **Clone the repository** to your local machine. Run the following command in your terminal:
+  ```bash
+  git clone https://github.com/Gv3N/K8sPortfolio
+  ```
 
-1. **Ensure you have access to your Kubernetes cluster**. You can use Minikube, Kind, or any cloud provider that supports Kubernetes.
+2. **Ensure you have access to your Kubernetes cluster**. You can use Minikube, Kind, or any cloud provider that supports Kubernetes.
   
-2. **Apply the Kubernetes configurations** by running the following command in your terminal:
+3. **Apply the Kubernetes configurations** by running the following command in your terminal:
 	```bash
-	kubectl apply -f k8s/
+	kubectl apply -f K8sPortfolio/k8s/deployment.yml
 	```
 
 	This command will create the necessary deployments, services, and other resources defined in your Kubernetes manifest files.
@@ -197,16 +201,33 @@ To deploy the application to your Kubernetes cluster, follow these steps:
 
 Once deployed, you can verify the status of your pods and services by running:
 ```bash
-kubectl get pods
-kubectl get services
+kubectl get pods -n k8sportfolio-namespace
+kubectl get services -n k8sportfolio-namespace
 ```
 
 This will show you the running pods and their corresponding services, allowing you to ensure everything is functioning correctly.
 
-> **Note**: Currently, the Kubernetes deployment YAML configurations are not included in this repository, but the application is designed to be
-> Kubernetes-ready, making it straightforward to deploy once the
-> configurations are added.
+### Troubleshooting
 
+If you encounter issues during deployment, use the following commands to troubleshoot:
+
+-   **Check the logs of a specific pod** to identify errors or warnings:
+```bash
+kubectl logs <full pod name> -n k8sportfolio-namespace
+```
+- **Describe the pod** to view detailed information about its status and events:
+```bash
+kubectl describe pod <pod name> -n k8sportfolio-namespace
+``` 
+- **Restart the pods** in the `k8sportfolio-namespace` namespace:
+```bash
+kubectl rollout restart deployment <deployment-name> -n k8sportfolio-namespace
+```
+
+Replace `<full pod name>`, `<pod name>`, or `<deployment-name>` with the actual names relevant to your application.
+
+> **Note**: If the issue persists, refer to the [Kubernetes official documentation](https://kubernetes.io/docs/home/) for additional
+> troubleshooting guidance and resources.
 
 ## Usage
 
