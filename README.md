@@ -175,7 +175,7 @@ The K8sPortfolio application is designed to be easily deployable in a Kubernetes
 
 ### Configuration
 
-The application is configured for deployment in a Kubernetes cluster. The necessary configurations are defined in the Kubernetes manifest files located in the `k8s/` directory. These files include:
+The application is configured for deployment in a Kubernetes cluster. The necessary configurations are defined in the Kubernetes manifest file located in the `K8sPortfolio/k8s/deployment.yml` file. This file include:
 
 - **Deployment Configuration**: Defines the desired state for your application, including the number of replicas, container images, and resource requests/limits.
 - **Service Configuration**: Exposes the application to the network, allowing communication between the frontend, backend, and database services.
@@ -227,7 +227,8 @@ kubectl rollout restart deployment <deployment-name> -n k8sportfolio-namespace
 Replace `<full pod name>`, `<pod name>`, or `<deployment-name>` with the actual names relevant to your application.
 
 > **Note**: If the issue persists, refer to the [Kubernetes official documentation](https://kubernetes.io/docs/home/) for additional
-> troubleshooting guidance and resources.
+> troubleshooting guidance and resources. You can also customize the deployment.yml files to better suit your specific 
+environment and machine setup.
 
 ## Usage
 
